@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://getbootstrap.com/favicon.ico">
+
+    <title>Signin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://getbootstrap.com/docs/4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <style>
+			html,body {
+				height: 100%;
+			}
+
+			body {
+				display: -ms-flexbox;
+				display: flex;
+				-ms-flex-align: center;
+				align-items: center;
+				padding-top: 40px;
+				padding-bottom: 40px;
+				background-color: #f5f5f5;
+			}
+
+			.form-signin {
+				width: 100%;
+				max-width: 330px;
+				padding: 15px;
+				margin: auto;
+			}
+			
+    </style>
+  </head>
+
+  <body class="text-center">
+			<form method = "post" class="form-signin" >
+					<h1 class="h3 mb-3 font-weight-normal">Sign In</h1>
+					{% csrf_token %}
+					{{ form.as_p }}
+					<button class="btn btn-lg btn-primary btn-block " type="submit">Sign in</button>
+					<p>Dont have an account yet? <a href="/signup/">Sign Up</a></p>
+			</form>
+			
+      
+  </body>
+</html>
+
