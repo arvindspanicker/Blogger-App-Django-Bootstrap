@@ -86,10 +86,12 @@ def blog(request, id):
             like_author = request.user.username
             like_to_post_author_id = post.author_id
             likes, created = Like.objects.get_or_create(like_post_id = postid, like_author_id = request.user.id,like_author = like_author ,like_to_post_author_id = like_to_post_author_id ,like_post_title= like_post_title ) 
+            all_posts = Post.objects.all()
             context = {
                 'post':post,
                 'comments':comments,
-                'likes':likes
+                'likes':likes,
+                'all_posts': all_posts
             }
             return render(request, 'blog/blog.html', context)
     else:

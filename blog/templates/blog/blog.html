@@ -17,9 +17,9 @@
             <hr>
             <!-- Preview Image -->
             {% if post.post_image %}  
-            <img class="img-fluid rounded" src="{{post.post_image.url}}" alt="Post Image">
+            <img class="img-fluid rounded" src="{{post.post_image.url}}" alt="Post Image" width="750" height="300">
             {% else %}
-            <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="Post Image">
+            <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="Post Image" width="750" height="300">
             {% endif %}
             <hr>
   
@@ -27,7 +27,7 @@
             <p class="lead">{{post.content}}</p>
             <hr>
             <p class="pull-left">
-                <span class="w3-left-align"><b>Likes: </b>{{post.likes}}</span><span class="pull-right">
+                <span class="w3-left-align"><b>Likes: </b>{{post.likes}}&nbsp;</span><span class="pull-right">
                     {% if not likes.like_flag %}
                         <a href="/home/like/{{post.id}}" id="like-button" name="like-button" style="text-decoration: none;"> 
                         Like</a></span><br>
@@ -36,6 +36,7 @@
                     {% endif%}  
             </p>
             <hr>
+            <br>
             <!-- Comments Form -->
             <div class="card my-4">
               <h5 class="card-header">Leave a Comment:</h5>
@@ -71,38 +72,20 @@
   
             <!-- Categories Widget -->
             <div class="card my-4">
-              <h5 class="card-header">Categories</h5>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-lg-6">
-                    <ul class="list-unstyled mb-0">
-                      <li>
-                        <a href="#">Web Design</a>
-                      </li>
-                      <li>
-                        <a href="#">HTML</a>
-                      </li>
-                      <li>
-                        <a href="#">Freebies</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="col-lg-6">
-                    <ul class="list-unstyled mb-0">
-                      <li>
-                        <a href="#">JavaScript</a>
-                      </li>
-                      <li>
-                        <a href="#">CSS</a>
-                      </li>
-                      <li>
-                        <a href="#">Tutorials</a>
-                      </li>
-                    </ul>
+                <h5 class="card-header">Categories</h5>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <ul class="list-unstyled mb-0">
+                        {% for post in all_posts %}
+                          <a href="/home/?searchquery={{post.tags}}" style="text-decoration: none;">{{post.tags}}</a>
+                        {% endfor %}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+    
             <!-- Side Widget -->
             <div class="card my-4">
                 {% if request.user.id == post.author_id %}
