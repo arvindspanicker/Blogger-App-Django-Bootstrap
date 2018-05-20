@@ -101,6 +101,23 @@
               <a class=" btn btn-success container m-1" href="/home/addblog">Write Blog</a>
               <a class=" btn btn-success container m-1" href="/home/chat/room1">Chat Rooms</a>
             </div>
+
+            <!-- Notification Widget -->
+            <div class="card my-4">
+                <p id="notification-log" name = "notification-log"></p>
+                <p>Old Notifications:</p>
+                {% if notifications %}
+                    {% for notification in notifications %}
+                        {% if notification.title == "Comment-Notification"%}
+                            <b>{{notification.by}}</b> has commented {{notification.message}}<br>
+                        {% elif notification.title == "Like-Notification"%}
+                            <b>{{notification.by}}</b>{{notification.message}}<br>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    None
+                {% endif %}
+              </div>
   
           </div>
   
@@ -109,4 +126,19 @@
   
       </div>
       <!-- /.container -->
+      <script>
+          var roomName = {{ room_name_json }};
+          var socket = new WebSocket('ws://'+ window.location.host +'/ws/home/notification/'+ roomName + '/');        
+          
+          socket.onclose = function(e) {
+              console.log(e);
+              console.error('Notification socket closed unexpectedly');
+          }; 
+          
+          socket.onmessage = function(e) {
+              var data = JSON.parse(e.data);
+              var message = data['message'];
+              document.getElementById('notification-log').innerHTML += (message + '<br>');
+          };      
+        </script>
 {% include 'blog/footer.html' %}

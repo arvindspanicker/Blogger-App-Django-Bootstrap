@@ -26,7 +26,16 @@
             <!-- Post Content -->
             <p class="lead">{{post.content}}</p>
             <hr>
-  
+            <p class="pull-left">
+                <span class="w3-left-align"><b>Likes: </b>{{post.likes}}</span><span class="pull-right">
+                    {% if not likes.like_flag %}
+                        <a href="/home/like/{{post.id}}" id="like-button" name="like-button" style="text-decoration: none;"> 
+                        Like</a></span><br>
+                    {% else %}
+                        Liked</span><br>
+                    {% endif%}  
+            </p>
+            <hr>
             <!-- Comments Form -->
             <div class="card my-4">
               <h5 class="card-header">Leave a Comment:</h5>
@@ -36,7 +45,7 @@
                   <div class="form-group">
                     <textarea class="form-control" id="comment-text" name ="comment-text" rows="3"></textarea>
                   </div>
-                  <input type="submit" class="btn btn-primary"></input>
+                  <input type="submit" id="comment-submit" name = "comment-submit" class="btn btn-primary"></input>
                 </form>
               </div>
             </div>
@@ -46,7 +55,7 @@
             <div class="media mb-4">
               <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
               <div class="media-body">
-                <h5 class="mt-0">{{comment.author}}</h5>
+                <h5 class="">{{comment.comment_author}}</h5>
                 {{comment.comment}}
               </div>
             </div>
@@ -98,6 +107,8 @@
             <div class="card my-4">
                 {% if request.user.id == post.author_id %}
                 <a class=" btn btn-success container m-1" href="/home/editblog/{{post.id}}">Edit Blog</a>
+                {% else %}
+                <a href ="/blog/askquestion/{{post.author_id}}/{{post.id}}" style="text-decoration: none" >Ask A Question</a>   
                 {% endif %}
                 <a class=" btn btn-success container m-1" href="/home/chat">Chat Rooms</a>
             </div>
@@ -110,5 +121,43 @@
   
       </div>
       <!-- /.container -->
-  
+      <script>
+          document.addEventListener("DOMContentLoaded", function(event) {
+            var roomName = {{ post.author_id }};
+            var title = "{{ post.title }}";
+            var currentUser = "{{request.user.username}}";
+            var blogsocket = new WebSocket('ws://'+ window.location.host +'/ws/home/notification/'+ roomName + '/');
+
+            blogsocket.onclose = function(e) {
+                console.log(e);
+                console.error('Notification socket closed unexpectedly');
+            }; 
+            document.querySelector('#comment-text').onkeyup = function(e) {
+                if (e.keyCode === 13) {  // enter, return
+                    document.querySelector('#comment-submit').click();
+                }
+            };
+            document.querySelector('#comment-submit').onclick = function(e) {
+                var messageInputDom = document.querySelector('#comment-text');
+                var message = messageInputDom.value;
+                console.log(message)
+                blogsocket.send(JSON.stringify({
+                    'message': '<b>' + currentUser + '</b>' +' has commented ' + message + 'on the post ' + title + '<br>'
+                }));
+            };
+            window.onload = function() {
+               var like_link = document.getElementById('like-button');
+               like_link.addEventListener('click', NotifyLike);
+                function NotifyLike(){
+                var message = '<b>' + currentUser + '</b>' +' has liked the post ' + title;
+                blogsocket.send(JSON.stringify({
+                    'message':  message + '<br>'
+                }));
+            }
+            };
+            
+          });
+          
+      
+  </script>
 {% include 'blog/footer.html' %}
