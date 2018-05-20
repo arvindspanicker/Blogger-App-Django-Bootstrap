@@ -56,6 +56,17 @@ class Notification(models.Model):
     viewed = models.BooleanField(default = False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+
+class ExtendedProfile(models.Model):
+    profile_image = models.ImageField(blank = True, null = True)
+    description = models.TextField(max_length = 400)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    facebook_link = models.CharField(max_length = 100)
+    linkedin_link = models.CharField(max_length = 100)
+    instagram_link = models.CharField(max_length = 100)
+    twitter_link = models.CharField(max_length = 100)
+    
+
 @receiver(post_save, sender=Comment)
 def create_comment_notification(sender, instance, **kwargs):
     if kwargs.get('created',False):

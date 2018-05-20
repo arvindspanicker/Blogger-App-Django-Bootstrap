@@ -4,16 +4,34 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 import json
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Post, Comment, Like, Notification, Question, Answer
-from .forms import PostForm
+from .models import Post, Comment, Like, Notification, Question, Answer,ExtendedProfile
+from .forms import PostForm, ProfileForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 import datetime
 
-# Create your views here.
 def profile(request):
     if request.user.is_authenticated:
-        return render(request, 'blog/profile.html') 
+        extendedprofile_info = ExtendedProfile.objects.filter(user_id = request.user.id).exists()
+        posts = Post.objects.filter(author_id = request.user.id).order_by("-timestamp")
+        if extendedprofile_info:
+            extendedprofile_info = ExtendedProfile.objects.get(user_id = request.user.id)
+            context = {
+                'eprof_info' : extendedprofile_info,
+                'posts': posts
+            }
+            return render(request, 'blog/profile.html',context)
+        else:   
+            form = ProfileForm(request.POST or None, request.FILES or None)
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.user_id = request.user.id
+                instance.save()
+                return HttpResponseRedirect('/home/profile/')
+            context = {
+                'form':form,
+            }
+            return render(request, 'blog/post_form.html', context)
     else:
         return HttpResponseRedirect('/login')
 
