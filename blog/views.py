@@ -8,6 +8,7 @@ from .models import Post, Comment
 from .forms import PostForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+import datetime
 
 # Create your views here.
 def profile(request):
@@ -22,7 +23,7 @@ def home(request):
         searchquery = request.GET.get("searchquery")
         if searchquery:
             posts_list = posts_list.filter(Q(tags=searchquery)| Q(title=searchquery)| Q(author_name=searchquery)).distinct()
-        paginator = Paginator(posts_list,1)
+        paginator = Paginator(posts_list,5)
         page = request.GET.get('page')
         try:
             posts = paginator.page(page)
@@ -75,9 +76,15 @@ def blog(request, id):
     else:
         return HttpResponseRedirect('/login')
 
-def chat(request):
+def chat(request,room_name):
     if request.user.is_authenticated:
-        return render(request, 'blog/chat.html')
+        chatroomname = request.GET.get("chatroomname")
+        time_now = datetime.datetime.now()
+        if chatroomname:
+            link = '/home/chat/' + chatroomname
+            return HttpResponseRedirect(link, {'room_name_json': mark_safe(json.dumps(room_name)),'user_name': mark_safe(json.dumps(request.user.username)), 'chat_room': chatroomname, 'time_now':time_now} ) 
+        else:
+            return render(request, 'blog/chat.html', {'room_name_json': mark_safe(json.dumps(room_name)),'user_name': mark_safe(json.dumps(request.user.username)), 'chat_room': chatroomname, 'time_now':time_now})
     else:
         return HttpResponseRedirect('/login')
 
