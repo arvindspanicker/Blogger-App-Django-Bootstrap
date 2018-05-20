@@ -1,0 +1,26 @@
+{% include 'blog/header.html' %}
+<div class = "w3-display-middle w3-container" style="width:80%;">
+    <div class="w3-center w3-container w3-half w3-padding-large  w3-card-4" style="margin-right:5px">
+        <form method="post">
+            {% csrf_token %}
+            <input type = "text" name = "question" id ="question" placeholder="Type Question here..."/>
+            <input type = "submit" value = "Submit"/>
+        </form>
+    </div>
+    <div class="w3-center w3-container w3-half  w3-padding-large w3-card-4" >
+        {% if questions %}
+            {%  for question in questions %}
+                <h6><b>Question : </b>{{question.question}}</h6><p>Asked by <b>{{question.question_asker}}</b></p>
+                <h6><b>Answer : </b></h6>
+                {% for answer in answers %}
+                    {% if answer.question_id == question.id %}
+                        {{answer.answer}}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            <p>No Questions</p>
+        {% endif%}
+    </div>
+</div>
+{% include 'blog/footer.html' %}

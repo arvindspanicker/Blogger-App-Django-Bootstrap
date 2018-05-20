@@ -107,8 +107,9 @@
             <div class="card my-4">
                 {% if request.user.id == post.author_id %}
                 <a class=" btn btn-success container m-1" href="/home/editblog/{{post.id}}">Edit Blog</a>
+                <a href ="/home/answerquestion/{{post.author_id}}/{{post.id}}" class=" btn btn-success container m-1" style="text-decoration: none" >Answer Questions</a>
                 {% else %}
-                <a href ="/blog/askquestion/{{post.author_id}}/{{post.id}}" style="text-decoration: none" >Ask A Question</a>   
+                <a href ="/home/askquestion/{{post.author_id}}/{{post.id}}" class=" btn btn-success container m-1" style="text-decoration: none" >Ask A Question</a>   
                 {% endif %}
                 <a class=" btn btn-success container m-1" href="/home/chat">Chat Rooms</a>
             </div>

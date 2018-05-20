@@ -25,6 +25,7 @@ class Comment(models.Model):
     comment_author = models.CharField(max_length = 200, default='none')
     comment_to_post_author_id = models.IntegerField(default =-1 )
     post_id = models.IntegerField(default=-1)
+    comment_to_post_title = models.CharField(max_length = 200, default ='none')
 
 
 class Like(models.Model):
@@ -33,6 +34,7 @@ class Like(models.Model):
     like_to_post_author_id = models.IntegerField(default =-1 )
     like_post_id = models.IntegerField(default = -1)
     like_author = models.CharField(max_length = 200, default='none')
+    like_post_title = models.CharField(max_length = 200, default = 'none')
 
 class Question(models.Model):
     question = models.TextField(max_length = 500)
@@ -49,6 +51,7 @@ class Answer(models.Model):
 class Notification(models.Model):
     title = models.CharField(max_length = 256)
     message = models.TextField()
+    post_title = models.CharField(max_length = 200, default ='none')
     by = models.CharField(max_length=200, default='none')
     viewed = models.BooleanField(default = False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -56,4 +59,4 @@ class Notification(models.Model):
 @receiver(post_save, sender=Comment)
 def create_comment_notification(sender, instance, **kwargs):
     if kwargs.get('created',False):
-        Notification.objects.create(user_id = instance.comment_to_post_author_id, title="Comment-Notification",message=instance.comment, by=instance.comment_author)
+        Notification.objects.create(user_id = instance.comment_to_post_author_id, title="Comment-Notification",message=instance.comment, by=instance.comment_author, post_title = instance.comment_to_post_title)

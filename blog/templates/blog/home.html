@@ -109,9 +109,9 @@
                 {% if notifications %}
                     {% for notification in notifications %}
                         {% if notification.title == "Comment-Notification"%}
-                            <b>{{notification.by}}</b> has commented {{notification.message}}<br>
+                            <b>{{notification.by}}</b> has commented {{notification.message}} on the post {{notification.post_title}}<br>
                         {% elif notification.title == "Like-Notification"%}
-                            <b>{{notification.by}}</b>{{notification.message}}<br>
+                            <b>{{notification.by}}</b>{{notification.message}} on the post {{notification.post_title}}<br>
                         {% endif %}
                     {% endfor %}
                 {% else %}

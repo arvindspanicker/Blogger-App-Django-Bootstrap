@@ -26,17 +26,9 @@
             <li class="nav-item">
               <a class="nav-link text-white" href="/home/profile">Profile</a>
             </li>
-            <li class="nav-item ">
-              <a class="nav-link dropdown-toggle text-white" href="/home/notification/{{request.user.id}}" id="navbarDropdown" role="button" >
-                  Notification
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <p class = "notification-log"></p>
-              </div>
-            </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="/logout/">Log Out</a>
-              </li>
+            </li>
           </ul>
           <form class="form-inline my-2 my-lg-0" method="GET">
             <input class="form-control mr-sm-2" type="search" name='searchquery' value="{{request.GET.searchquery}}" placeholder="Search" aria-label="Search">

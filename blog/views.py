@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.models import User
 import json
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from .models import Post, Comment, Like, Notification
+from .models import Post, Comment, Like, Notification, Question, Answer
 from .forms import PostForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
@@ -64,14 +64,16 @@ def blog(request, id):
             comment = request.POST['comment-text']
             post_id = id
             post = Post.objects.get(id = id)
+            comment_to_post_title = post.title
             comment_author = request.user.username
             comment_to_post_author_id = post.author_id
-            com = Comment(comment = comment, post_id = post_id, comment_author = comment_author, comment_to_post_author_id =comment_to_post_author_id)
+            com = Comment(comment = comment, post_id = post_id, comment_author = comment_author, comment_to_post_author_id =comment_to_post_author_id, comment_to_post_title = comment_to_post_title)
             com.save()
             postid = int(id)
             like_author = request.user.username
+            like_post_title = post.title 
             like_to_post_author_id = post.author_id
-            likes, created = Like.objects.get_or_create(like_post_id = postid, like_author_id = request.user.id,like_author = like_author ,like_to_post_author_id = like_to_post_author_id )
+            likes, created = Like.objects.get_or_create(like_post_id = postid, like_author_id = request.user.id,like_author = like_author ,like_to_post_author_id = like_to_post_author_id , like_post_title =like_post_title )
             likes.save()
             link = '/home/blog/' + str(int(id))
             return redirect(link)
@@ -80,9 +82,10 @@ def blog(request, id):
             post = Post.objects.get(id = post_id)
             comments = Comment.objects.filter(post_id = id)
             postid = int(id)
+            like_post_title = post.title 
             like_author = request.user.username
             like_to_post_author_id = post.author_id
-            likes, created = Like.objects.get_or_create(like_post_id = postid, like_author_id = request.user.id,like_author = like_author ,like_to_post_author_id = like_to_post_author_id ) 
+            likes, created = Like.objects.get_or_create(like_post_id = postid, like_author_id = request.user.id,like_author = like_author ,like_to_post_author_id = like_to_post_author_id ,like_post_title= like_post_title ) 
             context = {
                 'post':post,
                 'comments':comments,
@@ -132,7 +135,7 @@ def like(request, id):
         likes = Like.objects.get(like_author_id = request.user.id, like_post_id = post_id)
         likes.like_flag = True
         likes.save()
-        notify, created = Notification.objects.get_or_create(user_id = likes.like_to_post_author_id, title="Like-Notification",message=" has liked ", by=likes.like_author)
+        notify, created = Notification.objects.get_or_create(user_id = likes.like_to_post_author_id, title="Like-Notification",message=" has liked ", by=likes.like_author, post_title=likes.like_post_title)
         notify.save()
         post = Post.objects.get(id = post_id)
         post.likes += 1
@@ -142,17 +145,58 @@ def like(request, id):
     else:
         return HttpResponseRedirect('/login/')
 
-def shownotification(request,room_name):
+def askquestion(request,id,pid):
     if request.user.is_authenticated:
-        if request.user.id == int(room_name):
-            notifications = Notification.objects.filter(user_id =request.user.id)
-            context = {
-                'room_name_json': mark_safe(json.dumps(room_name)),
-                'user_name': mark_safe(json.dumps(request.user.username)),
-                'notifications': notifications
-            }
-            return render(request, 'blog/notifications.html', context)
+        if request.method == 'POST':
+            quest = request.POST['question']
+            question_author_id = int(id)
+            question_post_id = int(pid)
+            question = Question(question = quest, question_asker = request.user.username, question_author_id = question_author_id, question_post_id = question_post_id)
+            question.save()
+            link = '/home/askquestion/' + str(int(id)) + '/' +str(int(pid))
+            return redirect(link)
         else:
-            return HttpResponseRedirect('/blog/profile')
+            post_id = int(pid)
+            questions = Question.objects.filter(question_post_id = post_id)
+            answers = Answer.objects.all()
+            posts = Post.objects.all()
+            context = {
+                'questions' : questions,
+                'posts' : posts,
+                'answers': answers
+            }
+            return render(request, 'blog/askquestion.html',context)
     else:
-        return HttpResponseRedirect('/blog/')
+        return HttpResponseRedirect('/login/')
+
+def answerquestion(request,id,pid):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            ans = request.POST['answer']
+            qid = request.POST['question-id']
+            qid = int(qid)
+            question = Question.objects.get(id=qid)
+            if question.answer_flag == False:
+                question.answer_flag = True
+                question.save()
+                answer = Answer(question_id = qid, answer = ans)
+                answer.save()
+            else:
+                answer = Answer.objects.get(question_id = qid)
+                answer.answer = ans
+                answer.save()
+            link = '/home/answerquestion/' + str(int(id)) + '/' +str(int(pid))
+            return redirect(link)
+        else:
+            post_id = int(pid)
+            questions = Question.objects.filter(question_post_id = post_id)
+            posts = Post.objects.all()
+            answers = Answer.objects.all()
+            context = {
+                'questions' : questions,
+                'posts' : posts,
+                'answers': answers
+            }
+            return render(request, 'blog/answerquestion.html',context)
+    else:
+        return HttpResponseRedirect('/login/')

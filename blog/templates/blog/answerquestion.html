@@ -1,0 +1,39 @@
+{% include 'blog/header.html' %}
+<div class = "w3-display-middle w3-container" style="width:80%;">
+    <div class="w3-center w3-container w3-half  w3-padding-large w3-card-4" >
+            {% if questions %}
+                {%  for question in questions %}
+                    <h6><b>Question : </b>{{question.question}}</h6><p>Asked by <b>{{question.question_asker}}</b></p>
+                    <h6><b>Answer : </b></h6>
+                        {% if answers %}
+                            {% for answer in answers%}
+                                {% if answer.question_id == question.id %}
+                                    <p>{{answer.answer}}</p>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            <form method="post">
+                                    {% csrf_token %}
+                                    <input type = "text" name = "answer" id ="answer" placeholder="Type Answer here..."/>
+                                    <input type = "text" name = "question-id" id ="quetsion-id" value ={{question.id}} hidden/>
+                                    <input type = "submit" value = "Submit"/>
+                            </form>
+                        {% else %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type = "text" name = "answer" id ="answer" placeholder="Type Answer here..."/>
+                            <input type = "text" name = "question-id" id ="quetsion-id" value ={{question.id}} hidden/>
+                            <input type = "submit" value = "Submit"/>
+                        </form>
+                        {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No Questions</p>
+            {% endif%}
+    </div>
+    <div class="w3-center w3-container w3-half w3-padding-large  w3-card-4" style="margin-right:5px">
+        
+    </div>
+    
+</div>
+{% include 'blog/footer.html' %}
