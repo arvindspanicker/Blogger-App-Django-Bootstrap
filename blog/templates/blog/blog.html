@@ -32,7 +32,8 @@
                         <a href="/home/like/{{post.id}}" id="like-button" name="like-button" style="text-decoration: none;"> 
                         Like</a></span><br>
                     {% else %}
-                        Liked</span><br>
+                        Liked&nbsp;</span>
+                        <a href="/home/unlike/{{post.id}}" id="unlike-button" name="unlike-button" style="text-decoration: none;">Unlike&nbsp;</a><br>
                     {% endif%}  
             </p>
             <hr>
@@ -54,7 +55,15 @@
             <!-- Single Comment -->
             {% for comment in comments %}
             <div class="media mb-4">
-              <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+              {% for prof in extendedprof %}
+                {% if prof.user_id == comment.comment_author_id %}
+                  {% if prof.profile_image %}
+              <img class="d-flex mr-3 rounded-circle" src="{{prof.profile_image.url}}" alt="" width="50" height="50">
+                  {% else %}
+                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt=""> 
+                 {% endif %}
+                {% endif %}
+              {% endfor %}
               <div class="media-body">
                 <h5 class="">{{comment.comment_author}}</h5>
                 {{comment.comment}}

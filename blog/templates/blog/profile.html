@@ -50,16 +50,19 @@
         <h3 class="margin">Where To Find Me?</h3><br>
         <div class="row">
           <div class="col-sm-4">
+            <a href="{{eprof_info.facebook_link}}" style ="text-decoration: none;">
             <p>FaceBook</p>
-            <i class="fa fa-5x fa-facebook-square"></i>
+            <i class="fa fa-5x fa-facebook-square"></i></a>
           </div>
           <div class="col-sm-4"> 
+            <a href="{{eprof_info.instagram_link}}" style ="text-decoration: none;">
             <p>Instagram</p>
-            <i class="fa fa-5x fa-instagram"></i>
+            <i class="fa fa-5x fa-instagram"></i></a>
           </div>
           <div class="col-sm-4"> 
+            <a href="{{eprof_info.twitter_link}}" style ="text-decoration: none;">
             <p>Twitter</p>
-            <i class="fa fa-5x fa-twitter-square"></i>
+            <i class="fa fa-5x fa-twitter-square"></i></a>
           </div>
         </div>
       </div>
@@ -75,14 +78,15 @@
                   {% else %}
                   <img class="card-img-top img-responsive" src="http://placehold.it/750x300" width="750" height="300" alt="Post Image">
                   {% endif %}
+                  <br>
                   <div class="card-body">
-                    <h2 class="card-title">{{post.title}}</h2>
-                    <p class="card-text">{{post.content}}</p>
+                    <h2 class="card-title text-dark">{{post.title}}</h2>
+                    <p class="card-text text-dark">{{post.content}}</p>
                     <a href="/home/blog/{{post.id}}" class="btn btn-primary">Read More &rarr;</a>
                   </div>
                   <div class="card-footer text-muted">
                     {{post.timestamp}}
-                    <p class="card-text">{{post.user}}</p>
+                    <p class="card-text text-dark">{{post.user}}</p>
                   </div>
                 </div>
             {% endfor %}

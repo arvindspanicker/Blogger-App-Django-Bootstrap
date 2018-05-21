@@ -23,6 +23,7 @@ class Post(models.Model):
 class Comment(models.Model):
     comment = models.TextField(max_length = 1000)
     comment_author = models.CharField(max_length = 200, default='none')
+    comment_author_id = models.IntegerField(default =-1)
     comment_to_post_author_id = models.IntegerField(default =-1 )
     post_id = models.IntegerField(default=-1)
     comment_to_post_title = models.CharField(max_length = 200, default ='none')

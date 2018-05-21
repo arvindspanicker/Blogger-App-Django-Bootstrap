@@ -11,4 +11,4 @@ class PostForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = ExtendedProfile
-        fields = ["profile_image", "description","facebook_link","instagram_link","linkedin_link","twitter_link"]
+        fields = ["profile_image", "description","facebook_link","instagram_link","twitter_link"]

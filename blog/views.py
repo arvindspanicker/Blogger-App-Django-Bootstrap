@@ -84,8 +84,9 @@ def blog(request, id):
             post = Post.objects.get(id = id)
             comment_to_post_title = post.title
             comment_author = request.user.username
+            comment_author_id = request.user.id
             comment_to_post_author_id = post.author_id
-            com = Comment(comment = comment, post_id = post_id, comment_author = comment_author, comment_to_post_author_id =comment_to_post_author_id, comment_to_post_title = comment_to_post_title)
+            com = Comment(comment = comment,comment_author_id = comment_author_id, post_id = post_id, comment_author = comment_author, comment_to_post_author_id =comment_to_post_author_id, comment_to_post_title = comment_to_post_title)
             com.save()
             postid = int(id)
             like_author = request.user.username
@@ -99,6 +100,7 @@ def blog(request, id):
             post_id = str(id)
             post = Post.objects.get(id = post_id)
             comments = Comment.objects.filter(post_id = id)
+            extendedProf = ExtendedProfile.objects.all()
             postid = int(id)
             like_post_title = post.title 
             like_author = request.user.username
@@ -109,7 +111,8 @@ def blog(request, id):
                 'post':post,
                 'comments':comments,
                 'likes':likes,
-                'all_posts': all_posts
+                'all_posts': all_posts,
+                'extendedprof' : extendedProf,
             }
             return render(request, 'blog/blog.html', context)
     else:
@@ -218,5 +221,20 @@ def answerquestion(request,id,pid):
                 'answers': answers
             }
             return render(request, 'blog/answerquestion.html',context)
+    else:
+        return HttpResponseRedirect('/login/')
+
+
+def unlike(request, id):
+    if request.user.is_authenticated:
+        post_id = int(id)
+        likes = Like.objects.get(like_author_id = request.user.id, like_post_id = post_id)
+        likes.like_flag = False
+        likes.save()
+        post = Post.objects.get(id = post_id)
+        post.likes -= 1
+        post.save()
+        link = '/home/blog/' + str(int(id) )
+        return redirect(link)
     else:
         return HttpResponseRedirect('/login/')
