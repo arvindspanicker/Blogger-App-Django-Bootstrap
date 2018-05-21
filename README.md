@@ -2,10 +2,10 @@
 <h3> Install the following dependencies for this to work </h3>
 <b>Note: Make sure you have python 3 and not 2!!</b>
 <ul> 
-	<li>pip install django<li>
-	<li>pip install channels<li>
-	<li>pip install channels_redis<li>
-	<li>pip install pillow<li>
+	<li>pip install django</li>
+	<li>pip install channels</li>
+	<li>pip install channels_redis</li>
+	<li>pip install pillow</li>
 <ul>
 <b>Before running , make sure you run the redis server first </b>
 To run the chat,first run : sudo  docker run -p 6379:6379 -d redis:2.8

@@ -152,24 +152,17 @@
                 </a>
             </div> 
         </div>
-
-
-
         <div class="message-wrap col-lg-8" >
             <div class="msg-wrap" >
                 <p id="chat-log">
                     
                 </p>
             </div>
-
             <div class="send-wrap ">
-
                 <textarea class="form-control send-message"  id="chat-message-input" rows="3" placeholder="Write a reply..."></textarea>
-
-
             </div>
             <div class="btn-panel">
-                <input id="chat-message-submit" class=" col-lg-4 text-right btn send-message-btn pull-right" type="button" value="Send Message" role="button"><i class="fa fa-plus"></i></input>
+                <input id="chat-message-submit" class=" col-lg-4 text-right btn send-message-btn pull-right" type="button" value="Send Message" role="button"></input>
             </div>
         </div>
     </div>
@@ -203,7 +196,21 @@
             var messageInputDom = document.querySelector('#chat-message-input');
             var message = messageInputDom.value;
             var time = new Date();
-            var msg = '<div class="media msg">' +  '<a class="pull-left" href="#">' + '<img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 32px; height: 32px;" src="">' + '</a>' + '<div class="media-body">' + '<small class="pull-right time"><i class="fa fa-clock-o"></i>'+ time +'</small>' + '<h5 class="media-heading"> ' + user_name+ '</h5>' + '<small class="col-lg-10">' + message + '</small>' + '</div>' + '</div>';
+            var msg = '<div class="media msg">' +  
+                        '<a class="pull-left" href="#">' + 
+                        '</a>' + 
+                        '<div class="media-body">' + 
+                            '<small class="pull-right time"><i class="fa fa-clock-o"></i>'+
+                                 time +
+                            '</small>' + 
+                            '<h5 class="media-heading"> '
+                             + user_name+ 
+                             '</h5>' + 
+                             '<small class="col-lg-10">'
+                              + message + 
+                              '</small>' + 
+                        '</div>' + 
+                      '</div>';
 
             chatSocket.send(JSON.stringify({
                 'message': msg
