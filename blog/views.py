@@ -14,6 +14,26 @@ def profile(request):
     if request.user.is_authenticated:
         extendedprofile_info = ExtendedProfile.objects.filter(user_id = request.user.id).exists()
         posts = Post.objects.filter(author_id = request.user.id).order_by("-timestamp")
+        searchquery = request.GET.get("searchquery")
+        if searchquery:
+            posts_list = Post.objects.all().order_by("-timestamp")
+            notifications = Notification.objects.filter(user_id =request.user.id).order_by("-id")
+            posts_list = posts_list.filter(Q(tags=searchquery)| Q(title=searchquery)| Q(author_name=searchquery)).distinct()
+            paginator = Paginator(posts_list,5)
+            page = request.GET.get('page')
+            try:
+                posts = paginator.page(page)
+            except PageNotAnInteger:
+                posts = paginator.page(1)
+            except EmptyPage:
+                posts = paginator.page(paginator.num_pages)
+            context = {
+                'room_name_json': request.user.id,
+                'user_name': mark_safe(json.dumps(request.user.username)),
+                'notifications': notifications,
+                'posts': posts
+            }
+            return render(request, 'blog/home.html',context)
         if extendedprofile_info:
             extendedprofile_info = ExtendedProfile.objects.get(user_id = request.user.id)
             context = {
@@ -62,6 +82,26 @@ def home(request):
 
 def addblog(request):
     if request.user.is_authenticated:
+        searchquery = request.GET.get("searchquery")
+        if searchquery:
+            posts_list = Post.objects.all().order_by("-timestamp")
+            notifications = Notification.objects.filter(user_id =request.user.id).order_by("-id")
+            posts_list = posts_list.filter(Q(tags=searchquery)| Q(title=searchquery)| Q(author_name=searchquery)).distinct()
+            paginator = Paginator(posts_list,5)
+            page = request.GET.get('page')
+            try:
+                posts = paginator.page(page)
+            except PageNotAnInteger:
+                posts = paginator.page(1)
+            except EmptyPage:
+                posts = paginator.page(paginator.num_pages)
+            context = {
+                'room_name_json': request.user.id,
+                'user_name': mark_safe(json.dumps(request.user.username)),
+                'notifications': notifications,
+                'posts': posts
+            }
+            return render(request, 'blog/home.html',context)
         form = PostForm(request.POST or None, request.FILES or None)
         if form.is_valid():
             instance = form.save(commit=False)
@@ -78,6 +118,26 @@ def addblog(request):
 
 def blog(request, id):
     if request.user.is_authenticated:
+        searchquery = request.GET.get("searchquery")
+        if searchquery:
+            posts_list = Post.objects.all().order_by("-timestamp")
+            notifications = Notification.objects.filter(user_id =request.user.id).order_by("-id")
+            posts_list = posts_list.filter(Q(tags=searchquery)| Q(title=searchquery)| Q(author_name=searchquery)).distinct()
+            paginator = Paginator(posts_list,5)
+            page = request.GET.get('page')
+            try:
+                posts = paginator.page(page)
+            except PageNotAnInteger:
+                posts = paginator.page(1)
+            except EmptyPage:
+                posts = paginator.page(paginator.num_pages)
+            context = {
+                'room_name_json': request.user.id,
+                'user_name': mark_safe(json.dumps(request.user.username)),
+                'notifications': notifications,
+                'posts': posts
+            }
+            return render(request, 'blog/home.html',context)
         if request.method == 'POST':
             comment = request.POST['comment-text']
             post_id = id
@@ -120,6 +180,26 @@ def blog(request, id):
 
 def chat(request,room_name):
     if request.user.is_authenticated:
+        searchquery = request.GET.get("searchquery")
+        if searchquery:
+            posts_list = Post.objects.all().order_by("-timestamp")
+            notifications = Notification.objects.filter(user_id =request.user.id).order_by("-id")
+            posts_list = posts_list.filter(Q(tags=searchquery)| Q(title=searchquery)| Q(author_name=searchquery)).distinct()
+            paginator = Paginator(posts_list,5)
+            page = request.GET.get('page')
+            try:
+                posts = paginator.page(page)
+            except PageNotAnInteger:
+                posts = paginator.page(1)
+            except EmptyPage:
+                posts = paginator.page(paginator.num_pages)
+            context = {
+                'room_name_json': request.user.id,
+                'user_name': mark_safe(json.dumps(request.user.username)),
+                'notifications': notifications,
+                'posts': posts
+            }
+            return render(request, 'blog/home.html',context)
         chatroomname = request.GET.get("chatroomname")
         time_now = datetime.datetime.now()
         if chatroomname:
@@ -133,6 +213,26 @@ def chat(request,room_name):
 
 def editblog(request, id):
     if request.user.is_authenticated:
+        searchquery = request.GET.get("searchquery")
+        if searchquery:
+            posts_list = Post.objects.all().order_by("-timestamp")
+            notifications = Notification.objects.filter(user_id =request.user.id).order_by("-id")
+            posts_list = posts_list.filter(Q(tags=searchquery)| Q(title=searchquery)| Q(author_name=searchquery)).distinct()
+            paginator = Paginator(posts_list,5)
+            page = request.GET.get('page')
+            try:
+                posts = paginator.page(page)
+            except PageNotAnInteger:
+                posts = paginator.page(1)
+            except EmptyPage:
+                posts = paginator.page(paginator.num_pages)
+            context = {
+                'room_name_json': request.user.id,
+                'user_name': mark_safe(json.dumps(request.user.username)),
+                'notifications': notifications,
+                'posts': posts
+            }
+            return render(request, 'blog/home.html',context)
         post_id = int(id)
         print(post_id)
         post = Post.objects.get(id = post_id)
@@ -170,6 +270,26 @@ def like(request, id):
 
 def askquestion(request,id,pid):
     if request.user.is_authenticated:
+        searchquery = request.GET.get("searchquery")
+        if searchquery:
+            posts_list = Post.objects.all().order_by("-timestamp")
+            notifications = Notification.objects.filter(user_id =request.user.id).order_by("-id")
+            posts_list = post_list.filter(Q(tags=searchquery)| Q(title=searchquery)| Q(author_name=searchquery)).distinct()
+            paginator = Paginator(posts_list,5)
+            page = request.GET.get('page')
+            try:
+                posts = paginator.page(page)
+            except PageNotAnInteger:
+                posts = paginator.page(1)
+            except EmptyPage:
+                posts = paginator.page(paginator.num_pages)
+            context = {
+                'room_name_json': request.user.id,
+                'user_name': mark_safe(json.dumps(request.user.username)),
+                'notifications': notifications,
+                'posts': posts
+            }
+            return render(request, 'blog/home.html',context)
         if request.method == 'POST':
             quest = request.POST['question']
             question_author_id = int(id)
@@ -194,6 +314,26 @@ def askquestion(request,id,pid):
 
 def answerquestion(request,id,pid):
     if request.user.is_authenticated:
+        searchquery = request.GET.get("searchquery")
+        if searchquery:
+            posts_list = Post.objects.all().order_by("-timestamp")
+            notifications = Notification.objects.filter(user_id =request.user.id).order_by("-id")
+            posts_list = posts_list.filter(Q(tags=searchquery)| Q(title=searchquery)| Q(author_name=searchquery)).distinct()
+            paginator = Paginator(posts_list,5)
+            page = request.GET.get('page')
+            try:
+                posts = paginator.page(page)
+            except PageNotAnInteger:
+                posts = paginator.page(1)
+            except EmptyPage:
+                posts = paginator.page(paginator.num_pages)
+            context = {
+                'room_name_json': request.user.id,
+                'user_name': mark_safe(json.dumps(request.user.username)),
+                'notifications': notifications,
+                'posts': posts
+            }
+            return render(request, 'blog/home.html',context)
         if request.method == 'POST':
             ans = request.POST['answer']
             qid = request.POST['question-id']
