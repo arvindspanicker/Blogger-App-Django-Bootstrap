@@ -1,4 +1,5 @@
 # Blogger-App-Django-Bootstrap
+Note: Haven't done error handling!
 <h3> Install the following dependencies for this to work </h3>
 <b>Note: Make sure you have python 3 and not 2!!</b>
 <ul> 
